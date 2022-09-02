@@ -1,0 +1,19 @@
+{
+    "name": "Pronounce",
+    "description": "Pronounce the selected text",
+    "version": "1.0",
+    "manifest_version": 3,
+    "icons": {
+        "16": "pronounce.png",
+        "32": "pronounce.png",
+        "48": "pronounce.png",
+        "128": "pronounce.png"
+    },
+    "permissions": [
+        "contextMenus",
+        "tts"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    }
+}
