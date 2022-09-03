@@ -2,7 +2,7 @@
     "name": "Incognito Search Google",
     "description": "Search Google for the selected text in incognito window",
     "version": "1.0",
-    "manifest_version": 3,
+    "manifest_version": 2,
     "icons": {
         "16": "incognito.png",
         "32": "incognito.png",
@@ -13,6 +13,8 @@
         "contextMenus"
     ],
     "background": {
-        "service_worker": "background.js"
+        "scripts": [
+            "background.js"
+        ]
     }
 }

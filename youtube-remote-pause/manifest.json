@@ -5,12 +5,8 @@
     "permissions": [
         "tabs",
         "activeTab",
-		"scripting",
-        "commands"
-	],
-	"host_permissions": [
         "https://*.youtube.com/*"
-    ],
+	],
     "content_scripts": [{
         "matches": [
             "https://*.youtube.com/*"
@@ -26,16 +22,9 @@
         "128": "yt.png"
     },
     "background": {
-        "service_worker": "background.js"
+        "scripts": ["background.js"],
+        "persistent": false
     },
-	"externally_connectable": {
-		"ids": [
-			"*"
-		],
-		"matches": [
-            "https://*.youtube.com/*"
-		]
-	},
 	"commands": {
 		"toggle-play": {
 			"suggested_key": {
@@ -53,5 +42,5 @@
 			"description": "Toggle play/pause local"
 		}
 	},
-    "manifest_version": 3
+    "manifest_version": 2
 }

@@ -11,15 +11,26 @@ function toggle(tab) {
   sendMessage(tab, { action: "toggle" });
 }
 
+function queryTabs() {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
+      if (chrome.runtime.lastError)
+        console.error(chrome.runtime.lastError);
+      console.log('queryTabs', tabs)
+      resolve(tabs);
+    });
+  });
+}
+
 // Listener for keyboard shortcuts
 chrome.commands.onCommand.addListener(async (command) => {
   if (command === "toggle-play") {
-    let tabs = await chrome.tabs.query({ currentWindow: true });
+    let tabs = await queryTabs();
     for (let i = 0; i < tabs.length; i++) {
       toggle(tabs[i]);
     }
   } else if (command === "toggle-play-local") {
-    let tabs = await chrome.tabs.query({ currentWindow: true });
+    let tabs = await queryTabs();
     for (let i = 0; i < tabs.length; i++) {
       toggle(tabs[i]);
     }
@@ -28,8 +39,8 @@ chrome.commands.onCommand.addListener(async (command) => {
 
 // Installer
 chrome.runtime.onInstalled.addListener(async function installScript(details) {
-  let tabs = await chrome.tabs.query({ currentWindow: true });
-  let contentFiles = chrome.runtime.getManifest().content_scripts[0].js;
+  let tabs = await queryTabs();
+  let contentFile = chrome.runtime.getManifest().content_scripts[0].js[0];
   let matches = chrome.runtime.getManifest().content_scripts[0].matches;
 
   for (let index = 0; index < tabs.length; index++) {
@@ -44,10 +55,9 @@ chrome.runtime.onInstalled.addListener(async function installScript(details) {
 
     if (execute) {
       try {
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[index].id },
-          files: contentFiles,
-        });
+        chrome.tabs.executeScript(tabs[index].id, {
+          file: contentFile
+      });
       } catch (e) {}
     }
   }
