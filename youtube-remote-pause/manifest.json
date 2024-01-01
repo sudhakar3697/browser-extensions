@@ -4,21 +4,34 @@
     "description": "Toggle Youtube play/pause",
     "permissions": [
         "tabs",
-        "activeTab",
-		"scripting",
-        "commands"
-	],
-	"host_permissions": [
-        "https://*.youtube.com/*"
+        "activeTab"
     ],
-    "content_scripts": [{
-        "matches": [
-            "https://*.youtube.com/*"
-        ],
-        "run_at": "document_end",
-        "all_frames": true,
-        "js": ["yt_toggle.js"]
-    }],
+    "host_permissions": [
+        "https://*.youtube.com/*",
+        "https://open.spotify.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.youtube.com/*"
+            ],
+            "run_at": "document_end",
+            "all_frames": true,
+            "js": [
+                "yt_toggle.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://open.spotify.com/*"
+            ],
+            "run_at": "document_end",
+            "all_frames": true,
+            "js": [
+                "spotify_toggle.js"
+            ]
+        }
+    ],
     "icons": {
         "16": "yt.png",
         "32": "yt.png",
@@ -28,30 +41,22 @@
     "background": {
         "service_worker": "background.js"
     },
-	"externally_connectable": {
-		"ids": [
-			"*"
-		],
-		"matches": [
-            "https://*.youtube.com/*"
-		]
-	},
-	"commands": {
-		"toggle-play": {
-			"suggested_key": {
-				"default": "Ctrl+Shift+1",
-				"mac": "Command+Shift+1"
-			},
+    "commands": {
+        "toggle-play": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+1",
+                "mac": "Command+Shift+1"
+            },
             "global": true,
-			"description": "Toggle play/pause"
-		},
+            "description": "Toggle play/pause"
+        },
         "toggle-play-local": {
-			"suggested_key": {
-				"default": "Ctrl+Q",
-				"mac": "Command+Q"
-			},
-			"description": "Toggle play/pause local"
-		}
-	},
+            "suggested_key": {
+                "default": "Ctrl+Q",
+                "mac": "Command+Q"
+            },
+            "description": "Toggle play/pause local"
+        }
+    },
     "manifest_version": 3
 }
