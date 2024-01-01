@@ -13,7 +13,7 @@ function toggle(tab) {
 
 function queryTabs() {
   return new Promise((resolve, reject) => {
-    chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
+    chrome.tabs.query({ url: ["https://*.youtube.com/*", "https://open.spotify.com/*"] }, (tabs) => {
       if (chrome.runtime.lastError)
         console.error(chrome.runtime.lastError);
       console.log('queryTabs', tabs)
@@ -40,14 +40,15 @@ chrome.commands.onCommand.addListener(async (command) => {
 // Installer
 chrome.runtime.onInstalled.addListener(async function installScript(details) {
   let tabs = await queryTabs();
-  let contentFile = chrome.runtime.getManifest().content_scripts[0].js[0];
-  let matches = chrome.runtime.getManifest().content_scripts[0].matches;
+  let contentFile;
+  let contentScripts = chrome.runtime.getManifest().content_scripts;
 
   for (let index = 0; index < tabs.length; index++) {
     let execute = false;
-    matches.forEach(function (match) {
-      let reg = match.replace(/[.+?^${}()|/[\]\\]/g, "\\$&").replace("*", ".*");
+    contentScripts.forEach(function (cs) {
+      let reg = cs.matches[0].replace(/[.+?^${}()|/[\]\\]/g, "\\$&").replace("*", ".*");
       if (new RegExp(reg).test(tabs[index].url) === true) {
+        contentFile = cs.js[0];
         execute = true;
         return;
       }
@@ -55,10 +56,12 @@ chrome.runtime.onInstalled.addListener(async function installScript(details) {
 
     if (execute) {
       try {
-        chrome.tabs.executeScript(tabs[index].id, {
-          file: contentFile
-      });
-      } catch (e) {}
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[index].id },
+          files: [contentFile]
+        });
+
+      } catch (e) { }
     }
   }
 });
