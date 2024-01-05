@@ -13,7 +13,15 @@ function toggle(tab) {
 
 function queryTabs() {
   return new Promise((resolve, reject) => {
-    chrome.tabs.query({ url: ["https://*.youtube.com/*", "https://open.spotify.com/*"] }, (tabs) => {
+    chrome.tabs.query({
+      url: [
+        "https://*.youtube.com/*",
+        "https://open.spotify.com/*",
+        "https://www.hotstar.com/*",
+        "https://www.netflix.com/*",
+        "https://www.primevideo.com/*"
+      ]
+    }, (tabs) => {
       if (chrome.runtime.lastError)
         console.error(chrome.runtime.lastError);
       console.log('queryTabs', tabs)

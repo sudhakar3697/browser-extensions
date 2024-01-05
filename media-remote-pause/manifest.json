@@ -1,26 +1,19 @@
 {
-    "name": "Youtube Remote Pause",
+    "name": "Media Remote Toggle",
     "version": "1.0.0",
-    "description": "Toggle Youtube play/pause",
+    "description": "Toggle Media play/pause",
     "permissions": [
         "tabs",
         "activeTab"
     ],
     "host_permissions": [
         "https://*.youtube.com/*",
-        "https://open.spotify.com/*"
+        "https://open.spotify.com/*",
+        "https://www.hotstar.com/*",
+        "https://www.netflix.com/*",
+        "https://www.primevideo.com/*"
     ],
     "content_scripts": [
-        {
-            "matches": [
-                "https://*.youtube.com/*"
-            ],
-            "run_at": "document_end",
-            "all_frames": true,
-            "js": [
-                "yt_toggle.js"
-            ]
-        },
         {
             "matches": [
                 "https://open.spotify.com/*"
@@ -30,13 +23,26 @@
             "js": [
                 "spotify_toggle.js"
             ]
+        },
+        {
+            "matches": [
+                "https://*.youtube.com/*",
+                "https://www.netflix.com/*",
+                "https://www.primevideo.com/*",
+                "https://www.hotstar.com/*"
+            ],
+            "run_at": "document_end",
+            "all_frames": true,
+            "js": [
+                "video_toggle.js"
+            ]
         }
     ],
     "icons": {
-        "16": "yt.png",
-        "32": "yt.png",
-        "48": "yt.png",
-        "128": "yt.png"
+        "16": "mrp.png",
+        "32": "mrp.png",
+        "48": "mrp.png",
+        "128": "mrp.png"
     },
     "background": {
         "service_worker": "background.js"
